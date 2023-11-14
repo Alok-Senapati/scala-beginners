@@ -17,5 +17,14 @@ object Functions extends App {
   }
   printScala
 
+  // Parameterless functions
+  // Parameterless functions that doesn't return Unit can be defined and called without the parenthesis.
+  def getScalaString: String = "This is a Parameterless Function in scala"
+  println(getScalaString)
+
+  // Functions returning Unit should be defined with parenthesis. It won't cause error but it's a best practice
+  def doSomething(): Unit = { val x = 10 }
+  println(doSomething())
+
 
 }
