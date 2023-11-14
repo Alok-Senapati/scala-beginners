@@ -20,4 +20,15 @@ object VariablesTypesValues extends App{
   // Boolean Type
   val aTrueBool: Boolean = true
   val aFalseBool: Boolean = false
+  val someArray = Array(1, 3, 2)
+  println(someArray.toList)
+  val arr = someArray :+ 5
+  println(arr.toList)
+
+  // Code block
+  val aCodeBlock = { // Stores the value of the last expression of the CodeBlock
+    println("Inside a CodeBlock")
+    5 + 2
+  }
+  println(aCodeBlock)
 }
