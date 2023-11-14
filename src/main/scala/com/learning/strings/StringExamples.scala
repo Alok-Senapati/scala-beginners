@@ -1,6 +1,9 @@
 package com.learning.strings
 
+import java.util.Properties
+
 object StringExamples extends App {
+  System.setProperty("scala.time", "true")
   val str: String = "Hello, I'm learning Scala"
   println(str.charAt(1))
   println(str.substring(0, 5))
