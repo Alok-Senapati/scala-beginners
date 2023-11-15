@@ -2,6 +2,7 @@ package com.learning.strings
 
 import java.util.Properties
 
+
 object StringExamples extends App {
   System.setProperty("scala.time", "true")
   val str: String = "Hello, I'm learning Scala"
