@@ -1,7 +1,9 @@
 package com.learning.oop
 
 object AbstractClassesAndTrait extends App {
+  // An abstract class and a trait can contain both abstract and non-abstract fields/methods
   abstract class Animal {
+    val hello: String = "I'm an Animal" // Non-abstract field
     val creatureType: String // Abstract Field
     def eat: String // Abstract Method
   }
@@ -20,6 +22,8 @@ object AbstractClassesAndTrait extends App {
   // A trait is like an Interface in Java and similar to abstract class
   // The difference between a train and an abstract class is
   // A class can only inherit only one abstract class but can implement one or more traits
+  // Traits do not have constructor parameters
+  // An abstract class describes a real world entity while a trait describes behaviour
 
 
   trait Carnivore {
@@ -52,8 +56,8 @@ object AbstractClassesAndTrait extends App {
   println(tiger1.creatureType)
   println(tiger1.eat)
   // println(tiger1.eat(deer)) // raise Exception as tiger1 is of type Animal so it can only use the overridden eat method from Animal class in child class
-  
+
   // println(tiger2.creatureType) // raise error as Carnivore doesn't have creatureType field
-  println(tiger2.eat) // 
+  println(tiger2.eat) //
 
 }

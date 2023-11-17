@@ -58,4 +58,6 @@ object Inheritance extends App {
 
   // final keyword with a method restricts child class to override it
   // final keyword with class restricts any class to inherit it
+  // sealed keyword restricts a class to be inherited from any class outside of the source file.
+  // However, a child class of a sealed class can be inherited from anywhere
 }
