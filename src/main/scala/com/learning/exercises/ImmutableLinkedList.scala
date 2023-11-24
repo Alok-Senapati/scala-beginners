@@ -1,4 +1,4 @@
-package com.learning.oop
+package com.learning.exercises
 
 import scala.annotation.tailrec
 
