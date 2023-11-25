@@ -18,14 +18,14 @@ object GenericCovariantList extends App {
   }
 
   // Nothing is a subtype of all other types in Scala
-  object EmptyGenericList extends GenericList[Nothing] {
+  case object EmptyGenericList extends GenericList[Nothing] {
     override def head: Nothing = throw new Exception("Empty List has no head")
 
     override def tail: GenericList[Nothing] = throw new Exception("Empty List has no tail")
 
     override def isEmpty: Boolean = true
 
-    override def add[B >: Nothing](element: B): GenericList[B] = new ConsGenericList(element, EmptyGenericList)
+    override def add[B >: Nothing](element: B): GenericList[B] = ConsGenericList(element, EmptyGenericList)
 
     override def elementToString: String = ""
 
@@ -39,7 +39,7 @@ object GenericCovariantList extends App {
     override def ++[B >: Nothing](list: GenericList[B]): GenericList[B] = list
   }
 
-  class ConsGenericList[+A](h: A, t: GenericList[A]) extends GenericList[A] {
+  case class ConsGenericList[+A](h: A, t: GenericList[A]) extends GenericList[A] {
     override def head: A = h
 
     override def tail: GenericList[A] = this.t
@@ -54,7 +54,7 @@ object GenericCovariantList extends App {
     }
 
     override def filter(predicate: MyPredicate[A]): GenericList[A] = {
-      if predicate.test(h) then new ConsGenericList(h, t.filter(predicate))
+      if predicate.test(h) then ConsGenericList(h, t.filter(predicate))
       else t.filter(predicate)
     }
 
@@ -69,13 +69,6 @@ object GenericCovariantList extends App {
 
     override def flatMap[B](transformer: MyTransformer[A, GenericList[B]]): GenericList[B] = {
       transformer.transform(h) ++ t.flatMap(transformer)
-    }
-  }
-
-  object ConsGenericList {
-    def apply[A](items: A*): GenericList[A] = {
-      if items.isEmpty then EmptyGenericList
-      else new ConsGenericList(items.head, apply(items.tail:_*))
     }
   }
 
@@ -114,17 +107,17 @@ object GenericCovariantList extends App {
   println(intList)
   println(stringList)
 
-  val aConsGenericList = ConsGenericList[Int](1, 3, 6, 9, 22)
+  val aConsGenericList: ConsGenericList[Int] = ConsGenericList[Int](1, ConsGenericList[Int](3, ConsGenericList[Int](6, ConsGenericList[Int](9, ConsGenericList[Int](22, EmptyGenericList)))))
   println(aConsGenericList)
   println(aConsGenericList.filter(new MyPredicate[Int] {
-    override def test(item: Int): Boolean = item % 2 == 0
+    override def test(item: Int) = item % 2 == 0
   }))
+
   println(aConsGenericList.map(new MyTransformer[Int, Int] {
     override def transform(item: Int): Int = item * item
   }))
-  println(aConsGenericList.flatMap(new MyTransformer[Int, GenericList[Int]] {
-    override def transform(item: Int): GenericList[Int] = ConsGenericList[Int](item, item * 2)
-  }))
 
-  println(ConsGenericList[Int](1, 2, 3))
+  println(aConsGenericList.flatMap(new MyTransformer[Int, GenericList[Int]] {
+    override def transform(item: Int): GenericList[Int] = ConsGenericList(item, ConsGenericList(item * 2, EmptyGenericList))
+  }))
 }
