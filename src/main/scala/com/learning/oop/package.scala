@@ -5,5 +5,5 @@ package object oop {
   // There can be only 1 package object per package with the file name package.scala and object name same as of package name
 
   val SPEED_OF_LIGHT: Int = 299792458
-  def sayHello = println("Hello, Scala")
+  def sayHello(): Unit = println("Hello, Scala")
 }

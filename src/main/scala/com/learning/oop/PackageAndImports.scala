@@ -8,8 +8,8 @@ object PackageAndImports extends App {
   println(Calculator.add(10, 20))
   println(SPEED_OF_LIGHT) // As present in same package
   println(com.learning.oop.SPEED_OF_LIGHT) // Defined constant in oop package object
-  sayHello
-  com.learning.oop.sayHello
+  sayHello()
+  com.learning.oop.sayHello()
 
   // Default Imports
   // 1. java.lang -> String, Object, Exception etc.
