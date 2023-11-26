@@ -10,9 +10,9 @@ object GenericCovariantList extends App {
     def add[B >: A](element: B): GenericList[B]
     def elementToString: String
     override def toString: String = s"[ $elementToString ]"
-    def map[B](transformer: MyTransformer[A, B]): GenericList[B]
-    def flatMap[B](transformer: MyTransformer[A, GenericList[B]]): GenericList[B]
-    def filter(predicate: MyPredicate[A]): GenericList[A]
+    def map[B](transformer: A => B): GenericList[B]
+    def flatMap[B](transformer: A => GenericList[B]): GenericList[B]
+    def filter(predicate: A => Boolean): GenericList[A]
     @targetName("concat")
     def ++[B >: A](list: GenericList[B]): GenericList[B]
   }
@@ -29,11 +29,11 @@ object GenericCovariantList extends App {
 
     override def elementToString: String = ""
 
-    override def map[B](transformer: MyTransformer[Nothing, B]): GenericList[B] = EmptyGenericList
+    override def map[B](transformer: Nothing => B): GenericList[B] = EmptyGenericList
 
-    override def flatMap[B](transformer: MyTransformer[Nothing, GenericList[B]]): GenericList[B] = EmptyGenericList
+    override def flatMap[B](transformer: Nothing => GenericList[B]): GenericList[B] = EmptyGenericList
 
-    override def filter(predicate: MyPredicate[Nothing]): GenericList[Nothing] = EmptyGenericList
+    override def filter(predicate: Nothing => Boolean): GenericList[Nothing] = EmptyGenericList
 
     @targetName("concat")
     override def ++[B >: Nothing](list: GenericList[B]): GenericList[B] = list
@@ -53,13 +53,13 @@ object GenericCovariantList extends App {
       else "" + h + ", " + t.elementToString
     }
 
-    override def filter(predicate: MyPredicate[A]): GenericList[A] = {
-      if predicate.test(h) then ConsGenericList(h, t.filter(predicate))
+    override def filter(predicate: A => Boolean): GenericList[A] = {
+      if predicate(h) then ConsGenericList(h, t.filter(predicate))
       else t.filter(predicate)
     }
 
-    override def map[B](transformer: MyTransformer[A, B]): GenericList[B] = {
-      new ConsGenericList[B](transformer.transform(h), t.map(transformer))
+    override def map[B](transformer: A => B): GenericList[B] = {
+      new ConsGenericList[B](transformer(h), t.map(transformer))
     }
 
     @targetName("concat")
@@ -67,8 +67,8 @@ object GenericCovariantList extends App {
       new ConsGenericList[B](h, t ++ list)
     }
 
-    override def flatMap[B](transformer: MyTransformer[A, GenericList[B]]): GenericList[B] = {
-      transformer.transform(h) ++ t.flatMap(transformer)
+    override def flatMap[B](transformer: A => GenericList[B]): GenericList[B] = {
+      transformer(h) ++ t.flatMap(transformer)
     }
   }
 
@@ -90,14 +90,6 @@ object GenericCovariantList extends App {
         [1,2,3].flatMap(n => [n, n+1]) => [1,2,2,3,3,4]
    */
 
-  trait MyPredicate[-T] {
-    def test(item: T): Boolean
-  }
-
-  trait MyTransformer[-A, B] {
-    def transform(item: A): B
-  }
-
   var intList: GenericList[Int] = EmptyGenericList
   var stringList: GenericList[String] = EmptyGenericList
 
@@ -109,15 +101,15 @@ object GenericCovariantList extends App {
 
   val aConsGenericList: ConsGenericList[Int] = ConsGenericList[Int](1, ConsGenericList[Int](3, ConsGenericList[Int](6, ConsGenericList[Int](9, ConsGenericList[Int](22, EmptyGenericList)))))
   println(aConsGenericList)
-  println(aConsGenericList.filter(new MyPredicate[Int] {
-    override def test(item: Int) = item % 2 == 0
+  println(aConsGenericList.filter(new Function[Int, Boolean]:
+    override def apply(item: Int): Boolean = item % 2 == 0
+  ))
+
+  println(aConsGenericList.map(new Function1[Int, Int] {
+    override def apply(item: Int): Int = item * item
   }))
 
-  println(aConsGenericList.map(new MyTransformer[Int, Int] {
-    override def transform(item: Int): Int = item * item
-  }))
-
-  println(aConsGenericList.flatMap(new MyTransformer[Int, GenericList[Int]] {
-    override def transform(item: Int): GenericList[Int] = ConsGenericList(item, ConsGenericList(item * 2, EmptyGenericList))
+  println(aConsGenericList.flatMap(new Function1[Int, GenericList[Int]] {
+    override def apply(item: Int): GenericList[Int] = ConsGenericList(item, ConsGenericList(item * 2, EmptyGenericList))
   }))
 }
