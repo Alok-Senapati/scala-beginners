@@ -15,6 +15,18 @@ object GenericCovariantList extends App {
     def filter(predicate: A => Boolean): GenericList[A]
     @targetName("concat")
     def ++[B >: A](list: GenericList[B]): GenericList[B]
+    def foreach(f: A => Unit): Unit
+    def sort(compare: (A, A) => Int): GenericList[A]
+    def zipWith[B, C](list: GenericList[B], f: (A, B) => C): GenericList[C]
+    def fold[B](start: B)(f: (B, A) => B): B
+    def reverse: GenericList[A] = {
+      @tailrec
+      def doReverse(list: GenericList[A], rev: GenericList[A]): GenericList[A] = {
+        if list.isEmpty then rev
+        else doReverse(list.tail, rev.add(list.head))
+      }
+      doReverse(this, EmptyGenericList)
+    }
   }
 
   // Nothing is a subtype of all other types in Scala
@@ -37,6 +49,17 @@ object GenericCovariantList extends App {
 
     @targetName("concat")
     override def ++[B >: Nothing](list: GenericList[B]): GenericList[B] = list
+
+    override def foreach(f: Nothing => Unit): Unit = ()
+
+    override def sort(compare: (Nothing, Nothing) => Int): GenericList[Nothing] = EmptyGenericList
+
+    override def zipWith[B, C](list: GenericList[B], f: (Nothing, B) => C): GenericList[C] = {
+      if !list.isEmpty then throw new RuntimeException("Lists have different length")
+      else EmptyGenericList
+    }
+
+    override def fold[B](start: B)(f: (B, Nothing) => B): B = start
   }
 
   case class ConsGenericList[+A](h: A, t: GenericList[A]) extends GenericList[A] {
@@ -70,6 +93,46 @@ object GenericCovariantList extends App {
     override def flatMap[B](transformer: A => GenericList[B]): GenericList[B] = {
       transformer(h) ++ t.flatMap(transformer)
     }
+
+    override def foreach(f: A => Unit): Unit = {
+      f(h)
+      t.foreach(f)
+    }
+
+    override def sort(compare: (A, A) => Int): GenericList[A] = {
+      def insert(x: A, sortedList: GenericList[A]): GenericList[A] = {
+        if sortedList.isEmpty then ConsGenericList(x, EmptyGenericList)
+        else if compare(x, sortedList.head) <= 0 then ConsGenericList(x, sortedList)
+        else ConsGenericList(sortedList.head, insert(x, sortedList.tail))
+      }
+
+      @tailrec
+      def sortHelper(unsorted: GenericList[A], sorted: GenericList[A]): GenericList[A] ={
+        if unsorted.isEmpty then sorted
+        else sortHelper(unsorted.tail, insert(unsorted.head, sorted))
+      }
+
+      sortHelper(this, EmptyGenericList)
+    }
+
+    override def zipWith[B, C](list: GenericList[B], f: (A, B) => C): GenericList[C] = {
+      @tailrec
+      def zipHelper(list1: GenericList[A], list2: GenericList[B], res: GenericList[C]): GenericList[C] = {
+        if list1.isEmpty && list2.isEmpty then res
+        else if list2.isEmpty then throw new RuntimeException("Lists have different lengths")
+        else zipHelper(list1.tail, list2.tail, res.add(f(list1.head, list2.head)))
+      }
+      zipHelper(this, list, EmptyGenericList).reverse
+    }
+
+    override def fold[B](start: B)(f: (B, A) => B): B = {
+      @tailrec
+      def foldHelper(list: GenericList[A], res: B): B = {
+        if list.isEmpty then res
+        else foldHelper(list.tail, f(res, list.head))
+      }
+      foldHelper(this, start)
+    }
   }
 
 
@@ -90,8 +153,8 @@ object GenericCovariantList extends App {
         [1,2,3].flatMap(n => [n, n+1]) => [1,2,2,3,3,4]
    */
 
-  var intList: GenericList[Int] = EmptyGenericList
-  var stringList: GenericList[String] = EmptyGenericList
+  private var intList: GenericList[Int] = EmptyGenericList
+  private var stringList: GenericList[String] = EmptyGenericList
 
   intList = new ConsGenericList[Int](1, new ConsGenericList[Int](3, new ConsGenericList[Int](4, EmptyGenericList)))
   stringList = new ConsGenericList[String]("Hello", new ConsGenericList[String]("World", EmptyGenericList))
