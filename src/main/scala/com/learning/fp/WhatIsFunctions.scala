@@ -60,5 +60,4 @@ object WhatIsFunctions extends App {
   println(adder2(4))
   println(superAdder(3)(4)) // This is also known as function currying
 
-
 }

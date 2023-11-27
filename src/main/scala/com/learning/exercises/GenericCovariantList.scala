@@ -101,15 +101,7 @@ object GenericCovariantList extends App {
 
   val aConsGenericList: ConsGenericList[Int] = ConsGenericList[Int](1, ConsGenericList[Int](3, ConsGenericList[Int](6, ConsGenericList[Int](9, ConsGenericList[Int](22, EmptyGenericList)))))
   println(aConsGenericList)
-  println(aConsGenericList.filter(new Function[Int, Boolean]:
-    override def apply(item: Int): Boolean = item % 2 == 0
-  ))
-
-  println(aConsGenericList.map(new Function1[Int, Int] {
-    override def apply(item: Int): Int = item * item
-  }))
-
-  println(aConsGenericList.flatMap(new Function1[Int, GenericList[Int]] {
-    override def apply(item: Int): GenericList[Int] = ConsGenericList(item, ConsGenericList(item * 2, EmptyGenericList))
-  }))
+  println(aConsGenericList.filter((item: Int) => item % 2 == 0))
+  println(aConsGenericList.map((item: Int) => item * item))
+  println(aConsGenericList.flatMap((item: Int) => ConsGenericList(item, ConsGenericList(item * 2, EmptyGenericList))))
 }
