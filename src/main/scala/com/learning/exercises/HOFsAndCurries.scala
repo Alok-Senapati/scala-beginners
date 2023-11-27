@@ -54,5 +54,6 @@ object HOFsAndCurries extends App {
   val func2: Int => Int = _ + 10
   println(compose(func1, func2)(2))
   println(andThen(func1, func2)(2))
+
 }
 
