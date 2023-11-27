@@ -31,7 +31,7 @@ object AnonymousFunctions extends App {
   // Syntactic Sugar
   val incrementer: Int => Int = _ + 1 // same as (x: Int) => x + 1
   val multiplier: (Int, Int) => Int = _ * _ // same as (x: Int, y: Int) => x * y
-  // But for the above syntactic sugar, we must specify the function type
+  // But for the above syntactic sugar, we must specify the function type and can be used only if each input parameter is only used once
 
   /*
     Exercises -
