@@ -41,6 +41,15 @@ object Collections extends App {
                  IndexedSeq        Buffer         LinearSeq - | - LinkedList
                 /          \      /      \                    | - MutableList
         StringBuilder    ArrayBuffer  ListBuffer
+
+    - Traversable -> Base trait for all collections. Offers a great variety of methods:
+      - maps -> map, flatMap, collect
+      - conversions -> toArray, toList, toSeq
+      - size info -> isEmpty, size, nonEmpty
+      - tests -> exists, forall
+      - folds -> foldLeft, foldRight, reduceLeft, reduceRight
+      - retrieval -> head, tail, find
+      - string ops -> mkString
    */
 
 }
