@@ -9,7 +9,7 @@ object Collections extends App {
       - Scala uses immutable collections by default
       - Immutable Collections Hierarchy in Scala
                                 Traversable
-                                     |
+                                    |
                        --------- Iterable ----------
                        |            |              |
                    -- Set --       Seq         -- Map --
@@ -20,7 +20,7 @@ object Collections extends App {
                           |                  |
                      IndexedSeq         LinearSeq - | - List
                   /      |      \                   | - Stream
-              Vector  Range  String                 | - Stack
+              Vector   Range  String                | - Stack
                                                     | - Queue
 
 
@@ -29,7 +29,7 @@ object Collections extends App {
         - package - scala.collections.mutable
         - Mutable Collections Hierarchy in Scala
                                   Traversable
-                                       |
+                                      |
                     -------------- Iterable --------------
                     |                 |                  |
              ---- Set ----           Seq           ---- Map ----
