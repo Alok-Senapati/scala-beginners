@@ -19,7 +19,7 @@ object Collections extends App {
                           --------------------
                           |                  |
                      IndexedSeq         LinearSeq - | - List
-                  /       |     \                   | - Stream
+                   /      |     \                   | - Stream
               Vector   Range  String                | - Stack
                                                     | - Queue
 
@@ -39,7 +39,7 @@ object Collections extends App {
                       -------------------------------
                       |               |              |
                  IndexedSeq        Buffer         LinearSeq - | - LinkedList
-               /           \      /      \                    | - MutableList
+                /          \      /      \                    | - MutableList
         StringBuilder    ArrayBuffer  ListBuffer
    */
 
