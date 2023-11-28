@@ -19,7 +19,7 @@ object Collections extends App {
                           --------------------
                           |                  |
                      IndexedSeq         LinearSeq - | - List
-                  /      |      \                   | - Stream
+                  /       |     \                   | - Stream
               Vector   Range  String                | - Stack
                                                     | - Queue
 
