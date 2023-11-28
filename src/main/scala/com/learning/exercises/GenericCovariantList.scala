@@ -1,5 +1,7 @@
 package com.learning.exercises
 
+import org.graalvm.compiler.asm.amd64.AMD64VectorAssembler.VexFloatCompareOp.Predicate
+
 import scala.annotation.{tailrec, targetName}
 
 object GenericCovariantList extends App {
@@ -13,6 +15,7 @@ object GenericCovariantList extends App {
     def map[B](transformer: A => B): GenericList[B]
     def flatMap[B](transformer: A => GenericList[B]): GenericList[B]
     def filter(predicate: A => Boolean): GenericList[A]
+    def withFilter(predicate: A => Boolean): GenericList[A] = filter(predicate)
     @targetName("concat")
     def ++[B >: A](list: GenericList[B]): GenericList[B]
     def foreach(f: A => Unit): Unit
