@@ -4,7 +4,8 @@ object Collections extends App {
   /*
     - 2 Types
     1. Immutable Collections -
-      - Collections that never change. Every time a new collection is instantiated for any change.
+      - Immutable collections, never change. We have still operations that simulate additions, removals, or updates,
+      - but those operations will in each case return a new collection and leave the old collection unchanged.
       - package - scala.collections.immutable
       - Scala uses immutable collections by default
       - Immutable Collections Hierarchy in Scala
@@ -25,7 +26,8 @@ object Collections extends App {
 
 
       2. Mutable Collections -
-        - Collections that can change in place.
+        - A mutable collection can be updated, reduced or extended in place.
+        - This means you can change, add, or remove elements of a collection as a side effect.
         - package - scala.collections.mutable
         - Mutable Collections Hierarchy in Scala
                                   Traversable
@@ -50,6 +52,6 @@ object Collections extends App {
       - folds -> foldLeft, foldRight, reduceLeft, reduceRight
       - retrieval -> head, tail, find
       - string ops -> mkString
+    - More collections and hierarchy reference - https://docs.scala-lang.org/overviews/collections-2.13/overview.html
    */
-
 }
